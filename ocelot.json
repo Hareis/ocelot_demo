@@ -1,0 +1,41 @@
+﻿{
+  "GlobalConfiguration": {
+    "RateLimitOptions": {
+      "ClientWhitelist": [],
+      "EnableRateLimiting": true,
+      "Period": "1s",
+      "PeriodTimespan": 1,
+      "Limit": 1,
+      "QuotaExceededMessage": "单位时间内请求次数超过限制！",
+      "HttpStatusCode": 999
+    },
+    "QoSOptions": {
+      "ExceptionsAllowedBeforeBreaking": 3,
+      "DurationOfBreak": 5,
+      "TimeoutValue": 5000
+    },
+    "ServiceDiscoveryProvider": {
+      "Host": "192.168.1.11",
+      "Port": 8500,
+      "Type": "Consul"
+    }
+  },
+
+  "ReRoutes": [
+    {
+      "UpstreamPathTemplate": "/api/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ],
+      "DownstreamPathTemplate": "/api/{url}",
+      "DownstreamScheme": "http",
+      "ServiceName": "API-Test",
+      "UseServiceDiscovery": true,
+      "LoadBalancer": "RoundRobin",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "192.168.1.11",
+          "Port": 8081
+        }
+      ]
+    }
+  ]
+}
